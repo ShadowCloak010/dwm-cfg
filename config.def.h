@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -68,15 +70,24 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, 
     "-nb", col_gray1, "-nf", col_gray3, "-sb", col_purple, "-sf", col_lightWhite
     , NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char* captureScreen[] = {"flameshot", "gui", NULL};
+static const char* lowerVolume[] = {"volumeAdjust.sh", "-", NULL};
+static const char* raiseVolume[] = {"volumeAdjust.sh", "+", NULL};
+static const char* audioMute[] = {"volumeMute.sh", "+", NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+    { 0, XF86XK_AudioMute, spawn, { .v = audioMute } },
+    { 0, XF86XK_AudioRaiseVolume, spawn, { .v = raiseVolume } },
+    { 0, XF86XK_AudioLowerVolume, spawn, { .v = lowerVolume } },
+    { 0, XK_Print, spawn, { .v = captureScreen } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
